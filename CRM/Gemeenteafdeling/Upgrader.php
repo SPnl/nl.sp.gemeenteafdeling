@@ -39,9 +39,18 @@ class CRM_Gemeenteafdeling_Upgrader extends CRM_Gemeenteafdeling_Upgrader_Base {
   }
   
   protected function findGemeente($gemeente) {
-    $search = array(' NH');
-    $replace = array('');
+    $search = array(' NH', ' ZH', ' LB', ' NB');
+    $replace = array(' (Noord-Holland)', ' (Zuid-Holland)', ' (Limburg)', ' (Noord-Brabant)');
     $g = trim(str_replace($search, $replace, $gemeente));
+    if (stripos($g, '(')===false) {
+      $provincie = CRM_Core_DAO::executeQuery("SELECT DISTINCT(`provincie`) FROM `civicrm_postcodenl` WHERE `gemeente` = %1", array(1 => array($g, 'string')));
+      if ($provincie->fetch()) {
+        $g .= ' ('.$provincie->provincie.')';
+      }
+      if ($provincie->fetch()) {
+        return false;
+      }
+    }
     $value = CRM_Core_OptionGroup::getValue('gemeente', $g, 'value', 'String', 'value');
     if (!empty($value)) {
       return $value;
