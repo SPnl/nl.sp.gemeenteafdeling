@@ -48,6 +48,7 @@ class CRM_Gemeenteafdeling_Upgrader extends CRM_Gemeenteafdeling_Upgrader_Base {
         $g .= ' ('.$provincie->provincie.')';
       }
       if ($provincie->fetch()) {
+        CRM_Core_Error::debug_log_message("Gemeente ".$g." ook in ".$provincie->provincie);
         return false;
       }
     }
