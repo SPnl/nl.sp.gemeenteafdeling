@@ -54,6 +54,7 @@ class CRM_Gemeenteafdeling_Upgrader extends CRM_Gemeenteafdeling_Upgrader_Base {
     }
     $value = CRM_Core_OptionGroup::getValue('gemeente', $g, 'value', 'String', 'value');
     if (!empty($value)) {
+      CRM_Core_Error::debug_log_message("Gemeente not found in list ".$g.");
       return $value;
     }
     return false;
